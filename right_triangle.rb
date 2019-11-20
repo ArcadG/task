@@ -1,10 +1,7 @@
 print "Введите стороны треугольника a,b,c:" ""
 #"Значения вводятся через запятую"
-sides = gets.chomp.split(",")
+sides = gets.chomp.split(",").map(&:to_f)
 a, b, c = sides.sort
-a = a.to_f 
-b = b.to_f
-c = c.to_f
 print a.inspect
 if a == b && a ** 2 + b ** 2 == c ** 2
   print "Треугольник является равнобедренным, прямоугольным"

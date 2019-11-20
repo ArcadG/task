@@ -1,10 +1,7 @@
 print "ax^+bx+c=0 Введите данные a,b,c:" ""
 #"Значения вводятся через запятую"
-value = gets.chomp.split(",")
+value = gets.chomp.split(",").map(&:to_f)
 a, b, c = value
-a = a.to_f 
-b = b.to_f
-c = c.to_f
 
 d = b ** 2 - 4 * a * c
 
