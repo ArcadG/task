@@ -1,4 +1,4 @@
-print "Введите Ваше имя " ""
+print 'Введите Ваше имя " "'
 name = gets.chomp.capitalize
 print "#{name} введите Ваш рост " ""
 height = gets.chomp.to_i
