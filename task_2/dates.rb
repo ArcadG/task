@@ -6,12 +6,9 @@ print 'Введите год: '
 year = gets.chomp.to_i
 
 def leap_year(year)
-  if year % 4 == 0 && year % 100 != 0
-    29 
-  elsif year % 400 == 0
-    29 
-  else  
-    28 
+  if year % 4 == 0 && year % 100 != 0 then 29    
+  elsif year % 400 == 0 then 29   
+  else 28     
   end
 end
  

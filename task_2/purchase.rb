@@ -1,4 +1,4 @@
-basket = Hash.new
+basket = {}
 loop do
   print 'Введите название товара,чтобы закончить введите стоп: '
   name = gets.chomp
