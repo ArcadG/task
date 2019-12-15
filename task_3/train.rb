@@ -1,5 +1,5 @@
 class Train
-  attr_accessor :speed, :wagons, :route, :type, :station_index
+  attr_reader :speed, :wagons, :route, :type, :station_index
   def initialize(speed = 0, number, type, wagons)
     @speed = speed 
     @number = number
@@ -8,55 +8,62 @@ class Train
   end
   
   def go(speed)
-    self.speed += speed
+    @speed += speed
   end
 
   def reduce_speed(speed)
-    self.speed -= speed 
-    speed = 0 if self.speed < 0
+    @speed -= speed 
+    speed = 0 if @speed < 0
     speed
   end
 
   def to_attach
-    self.wagons += 1 if speed == 0
+    wagons += 1 if speed == 0
   end
    
   def unhook
-    self.wagons -= 1 if speed == 0 && wagons > 0
+    wagons -= 1 if speed == 0 && wagons > 0
   end
   
   def current_station
-    route.stations[@station_index]
+    route.stations.detect { |station| station.train_station(self) }
+  end
+
+  def current_station_index
+    route.stations.index(current_station)
   end
 
   def route_train(route)
     @route = route
-    @station_index = 0
     route.start_station.coming(self)
   end
    
   def next_station
-    if @station_index < route.stations.size 
-       route.stations[@station_index += 1]
+    index = current_station_index
+    if index < route.stations.size 
+       route.stations[index + 1]
     end
   end
    
-  def back_station(route)
-    if @station_index > 0  
-       route.stations[@station_index -= 1] 
+  def back_station
+    index = current_station_index
+    if index > 0  
+       route.stations[index - 1] 
     end
   end
 
   def train_next
-    current_station.departure(self)
-    next_station.coming(self)
-    @station_index += 1
+    current = current_station
+    further = next_station
+    further.coming(self)
+    current.departure(self)
   end
 
   def train_bask
-    current_station.departure(self)
-    back_station.coming(self)
-    @station_index -= 1
+    current = current_station
+    back = back_station
+    back.coming(self)
+    current.departure(self)
   end
 end
  

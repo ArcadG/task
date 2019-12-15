@@ -19,3 +19,7 @@ train.train_next
 puts station_1.train_list('g').inspect
 puts station_2.train_list('g').inspect
 
+puts '* ' * 50
+train.train_bask
+puts station_1.train_list('g').inspect
+puts station_2.train_list('g').inspect
