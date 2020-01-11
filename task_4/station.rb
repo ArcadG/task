@@ -26,7 +26,3 @@ class Station
      @trains.include?(train)
   end
 end
-
-
-    
-    

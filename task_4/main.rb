@@ -7,7 +7,7 @@ class Main
   require_relative 'passenger_train'
   require_relative 'passenger_wagon'
   require_relative 'cargo_wagon'
-  attr_reader :route, :train
+  attr_reader :route, :train, :wagon
   MAIN_MENU_ITEMS = [
     '1. Создать станцию',
     '2. Создать поезд',
@@ -225,22 +225,10 @@ class Main
 
   def add_wagon
     selection_train
-    if train.is_a?(PassengerTrain)
-      wagon = @wagons.select { |wagon| wagon.is_a?(PassengerWagon) }
-      wagon = wagon.first
-      train.to_attach(wagon)
-      @wagons.delete(wagon)
-      work_menu
-    elsif train.is_a?(CargoTrain)
-      wagon = @wagons.select { |wagon| wagon.is_a?(CargoWagon) }
-      wagon = wagon.first
-      train.to_attach(wagon)
-      @wagons.delete(wagon)
-      work_menu
-    else
-      puts 'Такого поезда нет'
-      work_menu
-    end
+    selection_wagon
+    train.to_attach(wagon)
+    @wagons.delete(wagon)
+    work_menu
   end
 
   def del_wagon
@@ -299,7 +287,18 @@ class Main
       station.train_list(self)
       information_menu
     end
-  end 
+  end
+  
+  # вспомогательная функция выбора вагона
+  def selection_wagon
+    if @wagons.select { |wagon| wagon.type == train.type }.empty?
+      puts 'Нет вагонов нужного типа, создайте вагон.'
+      main_menu
+    else
+      wagon = @wagons.select { |wagon| wagon.type == train.type }
+      @wagon = wagon.first
+    end
+  end
 
   #вспомогательная функция выбора поезда
   def selection_train
@@ -319,6 +318,7 @@ class Main
     input = gets.chomp
     if @routes.select { |route| route.name == input}.empty?
       puts 'Такого маршрута нет'
+      work_menu
     else
       route = @routes.select { |route| route.name == input}
       @route = route.first
