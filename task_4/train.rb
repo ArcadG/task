@@ -18,11 +18,11 @@ class Train
   end
 
   def to_attach(wagon) 
-    wagons << wagon if speed == 0 
+    wagons << wagon if speed == 0 && wagon.type == type 
   end
    
   def unhook(main)
-    if speed =~ 0 || wagons.empty?
+    if speed != 0 || wagons.empty?
       puts 'Поезд движется, или не прицеплены вагоны.'
     else
       wagon = wagons.fetch(-1)
