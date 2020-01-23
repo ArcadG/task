@@ -1,7 +1,7 @@
 class Train 
   include Manufacturer
   include InstanceCounter
-  @@trains = []
+  @@trains = {}
 
   attr_reader :speed, :wagons, :route, :station_index, :number, :type
   def initialize(speed = 0, number, type)
@@ -9,13 +9,13 @@ class Train
     @number = number
     @type = type
     @wagons = []
-    Train.add_train(self)
+    self.class.add_train(self)
     register_instance
   end
 
   class << self
     def add_train(train)
-      @@trains << train
+      @@trains.merge!(train.number => train)
     end
 
     def find

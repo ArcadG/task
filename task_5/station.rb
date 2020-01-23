@@ -9,7 +9,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
-    Station.add_station(self)    
+    self.class.add_station(self)    
     register_instance
   end
 
