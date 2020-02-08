@@ -44,6 +44,8 @@ class Main
     end
   end
 
+  private
+
   def return_wagon(wagon)
     @wagons << wagon
   end

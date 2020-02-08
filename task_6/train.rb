@@ -86,7 +86,7 @@ class Train
     further.coming(self)
     current.departure(self)
   end
-
+  
   def train_bask(main)
     current = current_station
     back = back_station
@@ -94,8 +94,18 @@ class Train
     current.departure(self)
   end
 
+  private
+
   def validate!
+    validate_number_format! 
+    validate_number!  
+  end
+  
+  def  validate_number_format! 
     raise ValidationError.new('Введен некорректный номер') unless @number =~ NUMBER_FORMAT
-    raise ValidationError.new('Поезд с таким номером уже создан') if @@trains.key?(@number)  
+  end
+
+  def validate_number!
+    raise ValidationError.new('Поезд с таким номером уже создан') if @@trains.key?(@number)
   end
 end

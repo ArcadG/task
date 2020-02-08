@@ -46,8 +46,18 @@ class Station
      @trains.include?(train)
   end
 
+  private
+
   def validate!
-    raise ValidationError.new('Такая станция уже есть') unless @@stations.select { |station| station.name == name }.empty?
-    raise ValidationError.new('Неверное название') unless name =~ NAME_FORMAT
+    validate_name!
+    validate_name_format!
   end
+
+  def validate_name!
+    raise ValidationError.new('Такая станция уже есть') unless @@stations.select { |station| station.name == name }.empty?
+  end
+  
+  def validate_name_format!
+    raise ValidationError.new('Неверное название') unless name =~ NAME_FORMAT
+  end 
 end

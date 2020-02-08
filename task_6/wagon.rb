@@ -9,7 +9,13 @@ class Wagon
     validate!
   end
 
+  private
+
   def validate!
+    validate_manufacturer! 
+  end
+
+  def validate_manufacturer!
     raise ValidationError.new('Производитель не может быть пустым') if @manufacturer.empty?
   end
 end
