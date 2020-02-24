@@ -1,6 +1,5 @@
-require_relative 'instance_counter'
-
 class Station
+  include Output
   include InstanceCounter
   include Valid
   NAME_FORMAT = /^[а-я]*$/i
@@ -34,7 +33,7 @@ class Station
     if @trains.empty?
       puts 'На станции нет поездов'
     else
-      @trains.each { |train| puts "Поезд № #{ train.number }"}
+      @trains.each { |train| output "Поезд № #{ train.number }"}
     end
   end
 

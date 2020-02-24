@@ -1,4 +1,5 @@
 class CargoWagon < Wagon
+  include Output
   attr_accessor :overall_volume, :loading_volume  
   def initialize(manufacturer, overall_volume)
     super('cargo', manufacturer)
@@ -8,7 +9,7 @@ class CargoWagon < Wagon
 
   def wagon_loading(volume)
     if @overall_volume <= @loading_volume && volume > @overall_volume 
-      puts 'Нет места'
+      output 'Нет места'
     else 
       @loading_volume += volume
     end

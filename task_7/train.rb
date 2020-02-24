@@ -1,4 +1,5 @@
 class Train
+  include Output
   include Manufacturer
   include InstanceCounter
   include Valid
@@ -45,7 +46,7 @@ class Train
    
   def unhook(main)
     if speed != 0 || wagons.empty?
-      puts 'Поезд движется, или не прицеплены вагоны.'
+      output 'Поезд движется, или не прицеплены вагоны.'
     else
       wagon = wagons.fetch(-1)
       main.return_wagon(wagon)
@@ -96,7 +97,7 @@ class Train
 
   def wagon_list_show(&block)
     if @wagons.empty?
-      puts 'Нет вагонов'
+      output 'Нет вагонов'
     else
       @wagons.each { |wagon| block.call(wagon) }
     end

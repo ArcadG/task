@@ -1,4 +1,5 @@
 class PassengerWagon < Wagon
+  include Output
   attr_accessor :number_of_seats, :occupied_places
   def initialize(manufacturer, number_of_seats)
     super('passenger', manufacturer)
@@ -8,7 +9,7 @@ class PassengerWagon < Wagon
 
   def passenger_loading
     if @number_of_seats <= @occupied_places 
-      puts 'Свободных мест нет'
+      output 'Свободных мест нет'
     else   
       @occupied_places += 1
     end 

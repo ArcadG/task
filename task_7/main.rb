@@ -1,17 +1,20 @@
+require_relative 'output.rb'
+require_relative 'constants.rb'
+require_relative 'valid.rb' 
+require_relative 'manufacturer.rb'
+require_relative 'instance_counter.rb'
+require_relative 'station.rb'
+require_relative 'train.rb'
+require_relative 'route.rb'
+require_relative 'wagon.rb'
+require_relative 'cargo_train.rb'
+require_relative 'passenger_train.rb'
+require_relative 'passenger_wagon.rb'
+require_relative 'cargo_wagon.rb'
+
 class Main
-  require_relative 'constants.rb'
-  require_relative 'valid.rb' 
-  require_relative 'manufacturer.rb'
-  require_relative 'instance_counter.rb'
-  require_relative 'station.rb'
-  require_relative 'train.rb'
-  require_relative 'route.rb'
-  require_relative 'wagon.rb'
-  require_relative 'cargo_train.rb'
-  require_relative 'passenger_train.rb'
-  require_relative 'passenger_wagon.rb'
-  require_relative 'cargo_wagon.rb'
   include Constants
+  include Output
   attr_reader :route, :train, :wagon
   
   def initialize
@@ -22,7 +25,7 @@ class Main
   end
   
   def main_menu
-    MAIN_MENU_ITEMS.each { |item| puts(item) }
+    MAIN_MENU_ITEMS.each { |item| output(item) }
     input = gets.chomp
     case input
     when '1' 
@@ -58,28 +61,28 @@ class Main
     print 'Название станции:>> '
     station = gets.chomp
     @stations << Station.new(station)
-    puts "Станция #{ station } создана"
+    output "Станция #{ station } создана"
     main_menu
   rescue Station::ValidationError => e
-    puts " #{ e.message} Попробуй еще раз"
+    output " #{ e.message} Попробуй еще раз"
     station_menu
   end
   
   def train_menu
-    TRAIN_MENU_ITEMS.each { |item| puts(item) }
+    TRAIN_MENU_ITEMS.each { |item| output(item) }
     input = gets.chomp
     case  input
     when '1'
       print 'Введите номер поезда:>>'
       input = gets.chomp
       @trains << PassengerTrain.new(input)
-      puts "Пассажирский поезд № #{ input } создан" 
+      output "Пассажирский поезд № #{ input } создан" 
       main_menu
     when '2'
       print 'Введите номер поезда:>>'
       input = gets.chomp
       @trains << CargoTrain.new(input)
-      puts "Грузовой поезд № #{ input } создан"
+      output "Грузовой поезд № #{ input } создан"
       main_menu
     when '3' 
       main_menu
@@ -87,26 +90,25 @@ class Main
       train_menu
     end
   rescue Train::ValidationError => e
-    puts " #{ e.message } Попробуйте еще раз"
+    output " #{ e.message } Попробуйте еще раз"
     train_menu
   end
   
   def wagon_menu
-    WAGON_MENU_ITEMS.each { |item| puts(item) }
+    WAGON_MENU_ITEMS.each { |item| output(item) }
     input = gets.chomp
     case input
     when '1'
       print 'Введите количество мест >>'
       input = gets.chomp.to_i   
       @wagons << PassengerWagon.new(read_manufacturer, input)
-      puts "Пассажирский вагон создан"
+      output "Пассажирский вагон создан"
       wagon_menu
     when '2'
       print 'Введите объем >>'
       input = gets.chomp.to_i
       @wagons << CargoWagon.new(read_manufacturer, input)
-      puts 'Грузовой вагон создан'
-      puts @wagons.inspect
+      output 'Грузовой вагон создан'
       wagon_menu
     when '3' 
       main_menu
@@ -114,12 +116,12 @@ class Main
       wagon_menu
     end
   rescue Wagon::ValidationError => e   
-    puts " #{ e.message } Попробуйте еще раз"
+    output " #{ e.message } Попробуйте еще раз"
     wagon_menu
   end
     
   def route_menu
-    ROUTE_MENU_ITEMS.each { |item| puts(item) }
+    ROUTE_MENU_ITEMS.each { |item| output(item) }
     input = gets.chomp
     case input
     when '1'
@@ -141,7 +143,7 @@ class Main
     print 'Название начальной станции: >>'
     input = gets.chomp
     if @stations.select { |station| station.name == input }.empty?
-      puts 'Такой станции нет'
+    output 'Такой станции нет'
       route_menu 
     else
       start = @stations.select { |station| station.name == input }
@@ -151,7 +153,7 @@ class Main
       print 'Название конечной станции: >>'
       input = gets.chomp
     if @stations.select { |station| station.name == input }.empty?
-      puts 'Такой станции нет'
+    output 'Такой станции нет'
       route_menu 
     else
       stop = @stations.select { |station| station.name == input }
@@ -159,11 +161,11 @@ class Main
     end
   
     @routes << Route.new(name, start, stop)
-    puts "Маршрут #{ name } создан"
+    output "Маршрут #{ name } создан"
     route_menu
 
   rescue Route::ValidationError => e
-    puts " #{ e.message } Попробуйте еще раз"
+    output " #{ e.message } Попробуйте еще раз"
     route_menu
   end
   
@@ -171,7 +173,7 @@ class Main
     route_selection
     intermediate 
     route.add_station(@intermediate_station)
-    puts "Промежуточная станция #{ @intermediate_station } добавлена"
+    output "Промежуточная станция #{ @intermediate_station } добавлена"
     route_menu
     
   end
@@ -179,12 +181,12 @@ class Main
   def del_intermediate_station
     intermediate 
     route.del_station(@intermediate_station)
-    puts "Промежуточная станция #{ @intermediate_station } удалена"
+    output "Промежуточная станция #{ @intermediate_station } удалена"
     route_menu
   end
 
   def work_menu
-    WORK_MENU_ITEMS.each { |item| puts (item) } 
+    WORK_MENU_ITEMS.each { |item| output(item) } 
     input = gets.chomp
     case input
     when '1'
@@ -237,7 +239,7 @@ class Main
   end
 
   def information_menu
-    INFORMATION_MENU_ITEMS.each { |item| puts item }
+    INFORMATION_MENU_ITEMS.each { |item| output(item) }
     input = gets.chomp
     case input
     when '1'
@@ -256,32 +258,32 @@ class Main
   end
 
   def route_list
-    @routes.each { |route| puts route.name }
+    @routes.each { |route| output route.name }
     information_menu
   end
 
   def station_list
-    @stations.each { |station| puts station.name }
+    @stations.each { |station| output station.name }
     information_menu
   end
 
   def list_all
     @stations.each do |station|
-      puts "На станции #{ station.name } находятся поезда:"
+      output "На станции #{ station.name } находятся поезда:"
       station.train_list_show do |train|
-        puts ">>>>№ #{ train.number } тип #{ train.type }"
-        puts "Прицеплено вагонов: #{ train.wagons.size }"
+        output ">>>>№ #{ train.number } тип #{ train.type }"
+        output "Прицеплено вагонов: #{ train.wagons.size }"
         train.wagon_list_show do |wagon|
-          puts "----Вагон № #{ train.wagons.index(wagon).next } тип #{ wagon.type }"
+          output "----Вагон № #{ train.wagons.index(wagon).next } тип #{ wagon.type }"
           if wagon.type == 'passenger'
-            puts "Количество мест: #{ wagon.number_of_seats }"
-            puts "Занято мест: #{ wagon.occupied_places }"
+            output "Количество мест: #{ wagon.number_of_seats }"
+            output "Занято мест: #{ wagon.occupied_places }"
           end
           if wagon.type == 'cargo'
-            puts "Общий объем: #{ wagon.overall_volume }"
-            puts "Занятый объем: #{ wagon.loading_volume }"  
+            output "Общий объем: #{ wagon.overall_volume }"
+            output "Занятый объем: #{ wagon.loading_volume }"  
           end 
-          puts '-----------------------------------------------------------'     
+          output '-----------------------------------------------------------'     
         end
       end
     end
@@ -292,7 +294,7 @@ class Main
     print 'Введите название станции:>>'
     input = gets.chomp
     if @stations.select { |station| station.name == input }.empty?
-      puts 'Такой станции нет'
+    output 'Такой станции нет'
       information_menu
     else
       station = @stations.select { |station| station.name == input }
@@ -303,7 +305,7 @@ class Main
   end
 
   def load_menu
-    LOAD_MENU_ITEMS.each { |item| puts item }
+    LOAD_MENU_ITEMS.each { |item| output(item) }
     input = gets.chomp
     case input
     when '1'
@@ -322,13 +324,13 @@ class Main
     if train.type == 'passenger'
       selection_wagon_load
     else
-      puts 'Поезд не является пассажирским'
+      output 'Поезд не является пассажирским'
       load_menu
     end
     wagon.passenger_loading
-    puts 'Посадка пассажира'
-    puts "Занято мест #{ wagon.busy_seats }"
-    puts "Свободно мест #{ wagon.free_seat }"
+    output 'Посадка пассажира'
+    output "Занято мест #{ wagon.busy_seats }"
+    output "Свободно мест #{ wagon.free_seat }"
     load_menu
   end
 
@@ -337,14 +339,14 @@ class Main
     if train.type =='cargo'
       selection_wagon_load
     else
-      puts 'Поезд не является грузовым'
+      output 'Поезд не является грузовым'
     end
     print 'Введите объем груза>>'
     volume = gets.chomp.to_i
     wagon.wagon_loading(volume)
-    puts 'Груз загружен'
-    puts "Занятый объем #{ wagon.volume_occupied }"
-    puts "Свободный объем #{ wagon.available_volume }"
+    output 'Груз загружен'
+    output "Занятый объем #{ wagon.volume_occupied }"
+    output "Свободный объем #{ wagon.available_volume }"
     load_menu
   end
 
@@ -355,9 +357,14 @@ class Main
     if input <= train.wagons.size
       @wagon = train.wagons[input - 1]
     else
-      puts 'Вагона с таким номером нет'
+      output 'Вагона с таким номером нет'
       load_menu
     end
+  end 
+
+  #замена puts
+  def output(string)
+    puts string
   end
 
   #вспомогательная функция ввода производителя вагона
@@ -369,7 +376,7 @@ class Main
   # вспомогательная функция выбора вагона
   def selection_wagon
     if @wagons.select { |wagon| wagon.type == train.type }.empty?
-      puts 'Нет вагонов нужного типа, создайте вагон.'
+      output 'Нет вагонов нужного типа, создайте вагон.'
       main_menu
     else
       wagon = @wagons.select { |wagon| wagon.type == train.type }
@@ -394,7 +401,7 @@ class Main
     print 'Введите название маршрута:>>'
     input = gets.chomp
     if @routes.select { |route| route.name == input}.empty?
-      puts 'Такого маршрута нет'
+    output 'Такого маршрута нет'
       work_menu
     else
       route = @routes.select { |route| route.name == input}
@@ -407,7 +414,7 @@ class Main
     print 'Название станции: >>'
     input = gets.chomp
     if @stations.select { |station| station.name == input }.empty?
-      puts 'Такой станции нет'
+    output 'Такой станции нет'
       station_menu
     else
       intermediate_station = @stations.select { |station| station.name == input }
