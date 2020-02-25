@@ -7,6 +7,12 @@ class PassengerWagon < Wagon
     @occupied_places = 0
   end
 
+  def show
+    super
+    output "Количество мест: #{ number_of_seats }"
+    output "Занято мест: #{ occupied_places }"
+  end
+
   def passenger_loading
     if @number_of_seats <= @occupied_places 
       output 'Свободных мест нет'

@@ -274,15 +274,8 @@ class Main
         output ">>>>№ #{ train.number } тип #{ train.type }"
         output "Прицеплено вагонов: #{ train.wagons.size }"
         train.wagon_list_show do |wagon|
-          output "----Вагон № #{ train.wagons.index(wagon).next } тип #{ wagon.type }"
-          if wagon.type == 'passenger'
-            output "Количество мест: #{ wagon.number_of_seats }"
-            output "Занято мест: #{ wagon.occupied_places }"
-          end
-          if wagon.type == 'cargo'
-            output "Общий объем: #{ wagon.overall_volume }"
-            output "Занятый объем: #{ wagon.loading_volume }"  
-          end 
+          output "----Вагон № #{ train.wagons.index(wagon).next }"
+          wagon.show
           output '-----------------------------------------------------------'     
         end
       end

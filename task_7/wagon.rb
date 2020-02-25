@@ -9,6 +9,10 @@ class Wagon
     validate!
   end
 
+  def show
+    output "Тип вагона #{ type }"
+  end
+
   private
 
   def validate!

@@ -7,6 +7,12 @@ class CargoWagon < Wagon
     @loading_volume = 0
   end
 
+  def show
+    super
+    output "Общий объем: #{ overall_volume }"
+    output "Занятый объем: #{ loading_volume }"  
+  end
+
   def wagon_loading(volume)
     if @overall_volume <= @loading_volume && volume > @overall_volume 
       output 'Нет места'
