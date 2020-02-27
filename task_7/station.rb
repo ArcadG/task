@@ -1,5 +1,4 @@
 class Station
-  include Output
   include InstanceCounter
   include Valid
   NAME_FORMAT = /^[а-я]*$/i
@@ -13,6 +12,10 @@ class Station
     validate!
     self.class.add_station(self)    
     register_instance
+  end
+
+  def show
+    { info: "На станции #{ name } находятся поезда:"  }
   end
 
   class << self
@@ -29,11 +32,11 @@ class Station
     @trains << train
   end
 
-  def train_list
+  def train_list(main)
     if @trains.empty?
-      puts 'На станции нет поездов'
+      'На станции нет поездов'
     else
-      @trains.each { |train| output "Поезд № #{ train.number }"}
+      @trains.map { |train| "Поезд № #{ train.number }"}
     end
   end
 

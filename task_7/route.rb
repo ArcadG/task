@@ -1,5 +1,4 @@
 class Route
-  include Output
   include InstanceCounter
   include Valid
   ValidationError = Class.new StandardError
@@ -26,10 +25,6 @@ class Route
 
   def end_station
     stations.last
-  end
-
-  def stations_list
-    stations.each { |station| output station.name  }
   end
    
   def validate!

@@ -1,5 +1,4 @@
 class Train
-  include Output
   include Manufacturer
   include InstanceCounter
   include Valid
@@ -18,6 +17,13 @@ class Train
     validate!
     self.class.add_train(self)
     register_instance
+  end
+
+  def show
+    {
+      name: ">>>>№ #{ number } тип #{ type }",
+      wagon_size: "Прицеплено вагонов: #{ wagons.size }"
+    }  
   end
 
   class << self
@@ -46,7 +52,7 @@ class Train
    
   def unhook(main)
     if speed != 0 || wagons.empty?
-      output 'Поезд движется, или не прицеплены вагоны.'
+      puts 'Поезд движется, или не прицеплены вагоны.'
     else
       wagon = wagons.fetch(-1)
       main.return_wagon(wagon)
@@ -97,7 +103,7 @@ class Train
 
   def wagon_list_show(&block)
     if @wagons.empty?
-      output 'Нет вагонов'
+      puts 'Нет вагонов'
     else
       @wagons.each { |wagon| block.call(wagon) }
     end

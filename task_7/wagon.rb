@@ -10,7 +10,7 @@ class Wagon
   end
 
   def show
-    output "Тип вагона #{ type }"
+    { wagon_type: "Тип вагона #{ type }" }
   end
 
   private

@@ -1,5 +1,4 @@
 class CargoWagon < Wagon
-  include Output
   attr_accessor :overall_volume, :loading_volume  
   def initialize(manufacturer, overall_volume)
     super('cargo', manufacturer)
@@ -8,14 +7,15 @@ class CargoWagon < Wagon
   end
 
   def show
-    super
-    output "Общий объем: #{ overall_volume }"
-    output "Занятый объем: #{ loading_volume }"  
+    { 
+      total_volume: "Общий объем: #{ overall_volume }",
+      occupied_volume: "Занятый объем: #{ loading_volume }"
+    }.merge(super) 
   end
 
   def wagon_loading(volume)
     if @overall_volume <= @loading_volume && volume > @overall_volume 
-      output 'Нет места'
+      puts 'Нет места'
     else 
       @loading_volume += volume
     end
