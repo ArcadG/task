@@ -14,11 +14,8 @@ class PassengerWagon < Wagon
   end
 
   def passenger_loading
-    if @number_of_seats <= @occupied_places 
-      puts 'Свободных мест нет'
-    else   
-      @occupied_places += 1
-    end 
+    return if @number_of_seats <= @occupied_places 
+    @occupied_places += 1
   end
 
   def busy_seats

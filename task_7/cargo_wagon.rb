@@ -14,11 +14,8 @@ class CargoWagon < Wagon
   end
 
   def wagon_loading(volume)
-    if @overall_volume <= @loading_volume && volume > @overall_volume 
-      puts 'Нет места'
-    else 
-      @loading_volume += volume
-    end
+    return if volume > @overall_volume - @loading_volume    
+    @loading_volume += volume
   end
 
   def volume_occupied

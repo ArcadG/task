@@ -47,10 +47,11 @@ class Main
     end
   end
 
-  private
+  
 
   def return_wagon(wagon)
     @wagons << wagon
+    work_menu
   end
 
   private
@@ -221,7 +222,11 @@ class Main
 
   def del_wagon
     selection_train
-    train.unhook(self)
+    if train.speed != 0 || train.wagons.empty?
+      puts 'Поезд движется, или не прицеплены вагоны.'
+    else
+      train.unhook(self)
+    end
   end
 
   def forward_movement
@@ -268,22 +273,29 @@ class Main
   def list_all
     @stations.each do |station|
       puts station.show[:info]
-      station.train_list_show do |train|
-        puts train.show[:name]
-        puts train.show[:wagon_size]
-
-        train.wagon_list_show do |wagon|
-          puts "----Вагон № #{ train.wagons.index(wagon).next }"
-          if train.type == 'passenger'
-            puts wagon.show[:wagon_type]
-            puts wagon.show[:total_seats]
-            puts wagon.show[:occupied_seats]
+      if station.trains.empty?
+        puts 'Нет поездов'
+      else
+        station.train_list_show do |train|
+          puts train.show[:name]
+          puts train.show[:wagon_size]
+          if train.wagons.empty?
+            puts 'Нет вагонов'
           else
-            puts wagon.show[:wagon_type]
-            puts wagon.show[:total_volume]
-            puts wagon.show[:occupied_volume]
+            train.wagon_list_show do |wagon|
+              puts "----Вагон № #{ train.wagons.index(wagon).next }"
+              if train.type == 'passenger'
+                puts wagon.show[:wagon_type]
+                puts wagon.show[:total_seats]
+                puts wagon.show[:occupied_seats]
+              else
+                puts wagon.show[:wagon_type]
+                puts wagon.show[:total_volume]
+                puts wagon.show[:occupied_volume]
+              end
+              puts '-----------------------------------------------------------'
+            end     
           end
-          puts '-----------------------------------------------------------'     
         end
       end
     end
@@ -299,7 +311,11 @@ class Main
     else
       station = @stations.select { |station| station.name == input }
       station = station.first
-      puts station.train_list(self)
+      if station.train_list(self).nil?
+        puts 'На станции нет поездов'
+      else
+        puts station.train_list(self)
+      end
       information_menu
     end
   end
@@ -327,10 +343,13 @@ class Main
       puts 'Поезд не является пассажирским'
       load_menu
     end
-    wagon.passenger_loading
-    puts 'Посадка пассажира'
-    puts "Занято мест #{ wagon.busy_seats }"
-    puts "Свободно мест #{ wagon.free_seat }"
+    if wagon.passenger_loading.nil?
+      puts 'Свободных мест нет' if wagon.passenger_loading.nil?
+    else
+      puts 'Посадка пассажира'
+      puts "Занято мест #{ wagon.busy_seats }"
+      puts "Свободно мест #{ wagon.free_seat }"
+    end
     load_menu
   end
 
@@ -344,9 +363,13 @@ class Main
     print 'Введите объем груза>>'
     volume = gets.chomp.to_i
     wagon.wagon_loading(volume)
-    puts 'Груз загружен'
-    puts "Занятый объем #{ wagon.volume_occupied }"
-    puts "Свободный объем #{ wagon.available_volume }"
+    if wagon.wagon_loading(volume).nil?
+      puts 'Нет места' 
+    else
+      puts 'Груз загружен'
+      puts "Занятый объем #{ wagon.volume_occupied }"
+      puts "Свободный объем #{ wagon.available_volume }"
+    end
     load_menu
   end
 

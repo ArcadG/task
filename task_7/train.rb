@@ -51,13 +51,10 @@ class Train
   end
    
   def unhook(main)
-    if speed != 0 || wagons.empty?
-      puts 'Поезд движется, или не прицеплены вагоны.'
-    else
-      wagon = wagons.fetch(-1)
-      main.return_wagon(wagon)
-      wagons.delete(wagon)
-    end
+    return if speed != 0 || wagons.empty?
+    wagon = wagons.fetch(-1)
+    main.return_wagon(wagon)
+    wagons.delete(wagon)
   end
   
   def current_station
@@ -102,11 +99,8 @@ class Train
   end
 
   def wagon_list_show(&block)
-    if @wagons.empty?
-      puts 'Нет вагонов'
-    else
-      @wagons.each { |wagon| block.call(wagon) }
-    end
+    return if @wagons.empty?
+    @wagons.each { |wagon| block.call(wagon) }
   end
 
   private

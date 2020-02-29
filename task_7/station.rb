@@ -33,19 +33,13 @@ class Station
   end
 
   def train_list(main)
-    if @trains.empty?
-      'На станции нет поездов'
-    else
-      @trains.map { |train| "Поезд № #{ train.number }"}
-    end
+    return if @trains.empty?
+    @trains.map { |train| "Поезд № #{ train.number }"}
   end
 
   def train_list_show(&block)
-    if @trains.empty?
-      puts 'На станции нет поездов'
-    else
-      @trains.each { |train| block.call(train) }
-    end
+    return if @trains.empty?
+    @trains.each { |train| block.call(train) }
   end
 
   def departure(train)
