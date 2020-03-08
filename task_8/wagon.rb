@@ -22,8 +22,8 @@ class Wagon
   end
 
   def validate_manufacturer!
-    if @manufacturer.empty?
-      raise ValidationError, 'Производитель не может быть пустым'
-    end
+    return unless @manufacturer.empty?
+
+    raise ValidationError, 'Производитель не может быть пустым'
   end
 end

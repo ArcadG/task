@@ -30,8 +30,7 @@ class Route
   end
 
   def validate!
-    if start_station == end_station
+    return unless start_station == end_station
       raise ValidationError, 'Начальная и конечная станции должны быть разными'
-    end
   end
 end

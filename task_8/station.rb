@@ -62,9 +62,9 @@ class Station
   end
 
   def validate_name!
-    unless @@stations.select { |station| station.name == name }.empty?
-      raise ValidationError, 'Такая станция уже есть'
-    end
+    return if @@stations.select { |station| station.name == name }.empty?
+
+    raise ValidationError, 'Такая станция уже есть'
   end
 
   def validate_name_format!

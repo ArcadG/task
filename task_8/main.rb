@@ -26,12 +26,12 @@ class Main
 
   def main_menu
     MAIN_MENU_ITEMS.each { |item| puts(item) }
-    input = gets.chomp.to_i   
-    menu = { 1 => station_menu, 2 => :train_menu, 3 => 'wagon_menu',
-             4 => route_menu, 5 => work_menu, 6 => load_menu,
-             7 => information_menu, 8 => exit }
-    main.send(menu[input] || main_menu)
-    end
+    input = gets.chomp.to_i
+    menu = { 1 => :station_menu, 2 => :train_menu, 3 => :wagon_menu,
+             4 => :route_menu, 5 => :work_menu, 6 => :load_menu,
+             7 => :information_menu, 8 => :exit }
+    send(menu[input] || main_menu)
+  end
 
   def return_wagon(wagon)
     @wagons << wagon
@@ -48,14 +48,14 @@ class Main
     main_menu
   rescue Station::ValidationError => e
     puts " #{e.message} Попробуй еще раз"
-    exit
+    main_menu
   end
 
   def train_menu
     TRAIN_MENU_ITEMS.each { |item| puts(item) }
-    input = gets.chomp.to.i
-    menu = { 1 => make_passenger_train, 2 => make_cargo_train, 3 => main_menu }
-    menu[input] || train_menu  
+    input = gets.chomp.to_i
+    menu = { 1 => :make_passenger_train, 2 => :make_cargo_train, 3 => :main_menu }
+    send(menu[input] || train_menu)
   rescue Train::ValidationError => e
     puts " #{e.message} Попробуйте еще раз"
     train_menu
@@ -64,8 +64,8 @@ class Main
   def wagon_menu
     WAGON_MENU_ITEMS.each { |item| puts(item) }
     input = gets.chomp.to_i
-    menu = { 1 => make_passenger_wagon, 2 => make_cargo_wagon, 3 => main_menu }
-    menu[input] || wagon_menu
+    menu = { 1 => :make_passenger_wagon, 2 => :make_cargo_wagon, 3 => :main_menu }
+    send(menu[input] || wagon_menu)
   rescue Wagon::ValidationError => e
     puts " #{e.message} Попробуйте еще раз"
     wagon_menu
@@ -74,9 +74,9 @@ class Main
   def route_menu
     ROUTE_MENU_ITEMS.each { |item| puts(item) }
     input = gets.chomp.to_i
-    menu = { 1 => station_start, 2 => add_intermediate_station,
-             3 => del_intermediate_station, 4 => main_menu }
-    menu[input] || route_menu
+    menu = { 1 => :station_start, 2 => :add_intermediate_station,
+             3 => :del_intermediate_station, 4 => :main_menu }
+    send(menu[input] || route_menu)
   end
 
   def station_start_stop
@@ -131,10 +131,10 @@ class Main
   def work_menu
     WORK_MENU_ITEMS.each { |item| puts(item) }
     input = gets.chomp.to_i
-    menu = { 1 => train_route, 2 => add_wagon, 3 => del_wagon,
-             4 => forward_movement, 5 => backward_movement,
-              6 => main_menu }
-    menu[input] || work_menu
+    menu = { 1 => :train_route, 2 => :add_wagon, 3 => :del_wagon,
+             4 => :forward_movement, 5 => :backward_movement,
+             6 => :main_menu }
+    send(menu[input] || work_menu)
   end
 
   def train_route
@@ -176,9 +176,9 @@ class Main
   def information_menu
     INFORMATION_MENU_ITEMS.each { |item| puts(item) }
     input = gets.chomp.to_i
-    menu = { 1 => station_list, 2 => station_train_list, 3 => :route_list,
-             4 => list_all, 5 => main_menu }
-    menu[input] || information_menu
+    menu = { 1 => :station_list, 2 => :station_train_list, 3 => :route_list,
+             4 => :list_all, 5 => :main_menu }
+    send(menu[input] || information_menu)
   end
 
   def route_list
@@ -243,8 +243,8 @@ class Main
   def load_menu
     LOAD_MENU_ITEMS.each { |item| puts(item) }
     input = gets.chomp.to_i
-    menu = { 1 => put_the_passenger, 2 => load_wagon, 3 => main_menu }
-    menu[input] || load_menu
+    menu = { 1 => :put_the_passenger, 2 => :load_wagon, 3 => :main_menu }
+    send(menu[input] || load_menu)
   end
 
   def put_the_passenger
@@ -256,7 +256,7 @@ class Main
       load_menu
     end
     if wagon.passenger_loading.nil?
-      puts 'Свободных мест нет' 
+      puts 'Свободных мест нет'
     else
       puts 'Посадка пассажира'
       puts "Занято мест #{wagon.busy_seats}"
@@ -285,7 +285,7 @@ class Main
     load_menu
   end
 
-  #для сздания пассажирских поездов
+  # для сздания пассажирских поездов
   def make_passenger_train
     print 'Введите номер поезда:>>'
     input = gets.chomp
@@ -294,7 +294,7 @@ class Main
     main_menu
   end
 
-  #для создания грузовых поездов
+  # для создания грузовых поездов
   def make_cargo_train
     print 'Введите номер поезда:>>'
     input = gets.chomp
@@ -303,7 +303,7 @@ class Main
     main_menu
   end
 
-  #для создания пассажирских вагонов
+  # для создания пассажирских вагонов
   def make_passenger_wagon
     print 'Введите количество мест >>'
     input = gets.chomp.to_i
@@ -312,7 +312,7 @@ class Main
     wagon_menu
   end
 
-  #для создания грузовых вагонов
+  # для создания грузовых вагонов
   def make_cargo_wagon
     print 'Введите объем >>'
     input = gets.chomp.to_i
