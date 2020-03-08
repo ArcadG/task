@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 class Station
   attr_reader :trains, :name
 
   def initialize(name)
-   @name = name
-   @trains = []
+    @name = name
+    @trains = []
   end
 
   def coming(train)
     @trains << train
   end
 
-  def train_list(main)
+  def train_list(_main)
     if @trains.empty?
       puts 'На станции нет поездов'
     else
-      @trains.each { |train| puts "Поезд № #{ train.number }"}
+      @trains.each { |train| puts "Поезд № #{train.number}" }
     end
   end
 
@@ -23,6 +25,6 @@ class Station
   end
 
   def train_station(train)
-     @trains.include?(train)
+    @trains.include?(train)
   end
 end

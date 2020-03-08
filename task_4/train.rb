@@ -1,26 +1,28 @@
+# frozen_string_literal: true
+
 class Train
   attr_reader :speed, :wagons, :route, :station_index, :number, :type
   def initialize(speed = 0, number, type)
-    @speed = speed 
+    @speed = speed
     @number = number
     @type = type
     @wagons = []
   end
-  
+
   def go(speed)
     @speed += speed
   end
 
   def reduce_speed(speed)
-    @speed -= speed 
+    @speed -= speed
     speed = 0 if @speed < 0
     speed
   end
 
-  def to_attach(wagon) 
-    wagons << wagon if speed == 0 && wagon.type == type 
+  def to_attach(wagon)
+    wagons << wagon if speed == 0 && wagon.type == type
   end
-   
+
   def unhook(main)
     if speed != 0 || wagons.empty?
       puts 'Поезд движется, или не прицеплены вагоны.'
@@ -30,7 +32,7 @@ class Train
       wagons.delete(wagon)
     end
   end
-  
+
   def current_station
     route.stations.detect { |station| station.train_station(self) }
   end
@@ -43,29 +45,25 @@ class Train
     @route = route
     route.start_station.coming(self)
   end
-   
+
   def next_station
     index = current_station_index
-    if index < route.stations.size 
-       route.stations[index + 1]
-    end
-  end
-   
-  def back_station
-    index = current_station_index
-    if index > 0  
-       route.stations[index - 1] 
-    end
+    route.stations[index + 1] if index < route.stations.size
   end
 
-  def train_next(main)
+  def back_station
+    index = current_station_index
+    route.stations[index - 1] if index > 0
+  end
+
+  def train_next(_main)
     current = current_station
     further = next_station
     further.coming(self)
     current.departure(self)
   end
 
-  def train_bask(main)
+  def train_bask(_main)
     current = current_station
     back = back_station
     back.coming(self)

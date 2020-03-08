@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 class Route
+  include InstanceCounter
+  include Valid
+  ValidationError = Class.new StandardError
   attr_reader :stations, :name
 
   def initialize(name, starting_station, end_station)
     @name = name
     @stations = [starting_station, end_station]
+    validate!
+    register_instance
   end
 
   def add_station(station)
@@ -24,7 +29,9 @@ class Route
     stations.last
   end
 
-  def stations_list
-    stations.each { |station| puts station.name }
+  def validate!
+    if start_station == end_station
+      raise ValidationError, 'Начальная и конечная станции должны быть разными'
+    end
   end
 end
