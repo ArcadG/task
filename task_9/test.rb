@@ -1,9 +1,16 @@
 require_relative 'accessors.rb'
 class Test
-  include Accessors
-  a = 3
-  s = 7
-  a = 5
-  a = 292
-  puts @history.inspect
-end
+  extend Accessors
+  attr_accessor_with_history :b, :c, :d
+end 
+
+#def print_history
+  #puts @history.inspect
+#end
+test = Test.new
+test.d = 2
+test.d = 3
+test.b = 75
+test.c = 766
+#test.print_history
+puts test.c_history.inspect
