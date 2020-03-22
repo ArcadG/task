@@ -6,7 +6,7 @@ class Train
   include Valid
 
   NUMBER_FORMAT = /^[0-9а-я]{3}-?[0-9а-я]{2}$/i.freeze
-  ValidationError = Class.new StandardError
+  validate :number, :format, NUMBER_FORMAT
 
   @@trains = {}
   attr_reader :speed, :wagons, :route, :station_index, :number, :type
@@ -101,24 +101,5 @@ class Train
     return if @wagons.empty?
 
     @wagons.each { |wagon| block.call(wagon) }
-  end
-
-  private
-
-  def validate!
-    validate_number_format!
-    validate_number!
-  end
-
-  def validate_number_format!
-    return if @number =~ NUMBER_FORMAT
-
-    raise ValidationError, 'Введен некорректный номер'
-  end
-
-  def validate_number!
-    return unless @@trains.key?(@number)
-
-    raise ValidationError, 'Поезд с таким номером уже создан'
   end
 end

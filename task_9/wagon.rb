@@ -3,7 +3,8 @@
 class Wagon
   include Manufacturer
   include Valid
-  ValidationError = Class.new StandardError
+  validate :manufacturer, :presence
+  validate :manufacturer, :type, String
   attr_reader :type
   def initialize(type, manufacturer)
     @type = type
@@ -13,17 +14,5 @@ class Wagon
 
   def show
     { wagon_type: "Тип вагона #{type}" }
-  end
-
-  private
-
-  def validate!
-    validate_manufacturer!
-  end
-
-  def validate_manufacturer!
-    return unless @manufacturer.empty?
-
-    raise ValidationError, 'Производитель не может быть пустым'
   end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'valid.rb'
 class Station
   include InstanceCounter
   include Valid
@@ -7,6 +8,9 @@ class Station
   ValidationError = Class.new StandardError
   attr_reader :trains, :name
   @@stations = []
+  validate :name, :format, NAME_FORMAT
+  validate :name, :type, String
+  validate :name, :presence
 
   def initialize(name)
     @name = name
@@ -52,22 +56,5 @@ class Station
 
   def train_station(train)
     @trains.include?(train)
-  end
-
-  private
-
-  def validate!
-    validate_name!
-    validate_name_format!
-  end
-
-  def validate_name!
-    return if @@stations.select { |station| station.name == name }.empty?
-
-    raise ValidationError, 'Такая станция уже есть'
-  end
-
-  def validate_name_format!
-    raise ValidationError, 'Неверное название' unless name =~ NAME_FORMAT
   end
 end
